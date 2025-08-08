@@ -11,11 +11,24 @@ const ApiTest = () => {
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
       console.log('Testing API URL:', apiUrl);
       
+      // First test the debug endpoint
+      console.log('Testing debug endpoint...');
+      const debugResponse = await axios.get(`${apiUrl}/debug`);
+      console.log('Debug response:', debugResponse.data);
+      
+      // Then test the jobs endpoint
+      console.log('Testing jobs endpoint...');
       const response = await axios.get(`${apiUrl}/jobs`);
-      setResult(`✅ Success! Found ${response.data.length} jobs`);
+      setResult(`✅ Success! Found ${response.data.length} jobs. Debug: ${JSON.stringify(debugResponse.data.origin)}`);
     } catch (error) {
       console.error('API Test Error:', error);
-      setResult(`❌ Error: ${error.message}`);
+      console.error('Error details:', {
+        message: error.message,
+        code: error.code,
+        response: error.response?.data,
+        status: error.response?.status
+      });
+      setResult(`❌ Error: ${error.message} (${error.code || 'Unknown'})`);
     }
     setLoading(false);
   };
@@ -33,9 +46,11 @@ const ApiTest = () => {
       {result && (
         <div className="mt-2 p-2 bg-white rounded">
           <p>{result}</p>
-          <p className="text-sm text-gray-600">
-            API URL: {import.meta.env.VITE_API_URL || 'http://localhost:5000'}
-          </p>
+          <div className="text-sm text-gray-600 mt-2">
+            <p><strong>API URL:</strong> {import.meta.env.VITE_API_URL || 'http://localhost:5000'}</p>
+            <p><strong>Environment:</strong> {import.meta.env.MODE}</p>
+            <p><strong>All Env Vars:</strong> {JSON.stringify(import.meta.env, null, 2)}</p>
+          </div>
         </div>
       )}
     </div>

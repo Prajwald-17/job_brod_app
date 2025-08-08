@@ -10,15 +10,12 @@ const applicationRoutes = require('./routes/applicationRoutes');
 
 const app = express();
 
-// CORS configuration for production
+// CORS configuration - allow all origins for now
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:3000',
-    'https://job-brod-app-bd3b.vercel.app',
-    'https://*.vercel.app'
-  ],
-  credentials: true
+  origin: true,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
 
 app.use(express.json());
@@ -38,6 +35,17 @@ app.get('/', (req, res) => {
 // Health check route
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+
+// Debug route to check CORS and connection
+app.get('/debug', (req, res) => {
+  res.json({ 
+    message: 'Debug endpoint working',
+    origin: req.headers.origin,
+    userAgent: req.headers['user-agent'],
+    timestamp: new Date().toISOString(),
+    headers: req.headers
+  });
 });
 
 // Serve uploaded files
