@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchJobs } from '../store/jobsSlice';
 import SearchBar from '../components/SearchBar';
 import JobCard from '../components/JobCard';
+import ApiTest from '../components/ApiTest';
 
 const JobListings = () => {
   const dispatch = useDispatch();
@@ -35,6 +36,7 @@ const JobListings = () => {
         <p className="text-xl text-gray-600">Discover amazing opportunities from top companies</p>
       </div>
 
+      <ApiTest />
       <SearchBar />
 
       <div className="mb-6">
