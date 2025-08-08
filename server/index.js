@@ -9,8 +9,36 @@ const jobRoutes = require('./routes/jobRoutes');
 const applicationRoutes = require('./routes/applicationRoutes');
 
 const app = express();
-app.use(cors());
+
+// CORS configuration for production
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'https://job-brod-app-bd3b.vercel.app',
+    'https://*.vercel.app'
+  ],
+  credentials: true
+}));
+
 app.use(express.json());
+
+// Root route
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'Job Board API is running!', 
+    version: '1.0.0',
+    endpoints: {
+      jobs: '/jobs',
+      apply: '/apply'
+    }
+  });
+});
+
+// Health check route
+app.get('/health', (req, res) => {
+  res.json({ status: 'OK', timestamp: new Date().toISOString() });
+});
 
 // Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
