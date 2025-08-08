@@ -8,7 +8,7 @@ const ApiTest = () => {
   const testApi = async () => {
     setLoading(true);
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const apiUrl = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '');
       console.log('Testing API URL:', apiUrl);
       
       // First test the debug endpoint
@@ -47,7 +47,7 @@ const ApiTest = () => {
         <div className="mt-2 p-2 bg-white rounded">
           <p>{result}</p>
           <div className="text-sm text-gray-600 mt-2">
-            <p><strong>API URL:</strong> {import.meta.env.VITE_API_URL || 'http://localhost:5000'}</p>
+            <p><strong>API URL:</strong> {(import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '')}</p>
             <p><strong>Environment:</strong> {import.meta.env.MODE}</p>
             <p><strong>All Env Vars:</strong> {JSON.stringify(import.meta.env, null, 2)}</p>
           </div>
